@@ -12,11 +12,28 @@ class SecondViewController: UIViewController {
 
     @IBOutlet weak var inputToDoText: UITextField!
     @IBAction func saveButton(_ sender: Any) {
+        let itemObjects = UserDefaults.standard.object(forKey: "items")
+        print(itemObjects)
+        var items:[String]
+        
+        if let checkObjects = itemObjects as? [String]{
+            items = checkObjects
+            items.append(inputToDoText.text!)
+        }
+        else{
+            items = [inputToDoText.text!]
+        }
+        inputToDoText.text = " "
+        UserDefaults.standard.set(items, forKey: "items")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {

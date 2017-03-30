@@ -12,16 +12,26 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @IBOutlet weak var toDoTable: UITableView!
     
+    var items: [String] = []
+    
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return items.count
     }
     
    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
-        cell.textLabel?.text = String(indexPath.row)
+        cell.textLabel?.text = items[indexPath.row]
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.delete{
+            items.remove(at: indexPath.row)
+            toDoTable.reloadData()
+            UserDefaults.standard.set(items, forKey: "items")
+        }
     }
     
 
@@ -29,6 +39,16 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let itemObjects = UserDefaults.standard.object(forKey: "items")
+        
+        if let object = itemObjects as? [String] {
+            items = object
+        }
+        toDoTable.reloadData()
+        
     }
 
     override func didReceiveMemoryWarning() {

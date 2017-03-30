@@ -8,12 +8,11 @@
 
 import UIKit
 
-class SecondViewController: UIViewController {
+class SecondViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var inputToDoText: UITextField!
     @IBAction func saveButton(_ sender: Any) {
         let itemObjects = UserDefaults.standard.object(forKey: "items")
-        print(itemObjects)
         var items:[String]
         
         if let checkObjects = itemObjects as? [String]{
@@ -34,6 +33,11 @@ class SecondViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 
     override func didReceiveMemoryWarning() {
